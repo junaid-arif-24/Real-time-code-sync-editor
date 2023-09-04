@@ -75,14 +75,21 @@ const EditorPage = () => {
     }, []);
 
     async function copyRoomId() {
-        try {
-            await navigator.clipboard.writeText(roomId);
-            toast.success('Room ID has been copied to your clipboard');
-        } catch (err) {
-            toast.error('Could not copy the Room ID');
-            console.error(err);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            try {
+                await navigator.clipboard.writeText(roomId);
+                toast.success('Room ID has been copied to your clipboard');
+            } catch (err) {
+                toast.error('Could not copy the Room ID');
+                console.error(err);
+            }
+        } else {
+            // Clipboard API is not available, provide an alternative method
+            // (e.g., instruct the user to manually copy the Room ID)
+            toast.error('Clipboard functionality is not supported in this browser.');
         }
     }
+    
 
     function leaveRoom() {
         reactNavigator('/');
